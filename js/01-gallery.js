@@ -30,9 +30,16 @@ insertGalleryItems(result);
 let modal = {};
 
 const showModal = (original) => {
-  modal = basicLightbox.create(`
+  modal = basicLightbox.create(
+    `
   <img src="${original}" width="800" height="600">
-`);
+`,
+    {
+      onClose: (instance) => {
+        window.removeEventListener('keydown', onEscKeyPress);
+      },
+    }
+  );
 
   modal.show();
 };
@@ -43,7 +50,6 @@ const onCloseModal = () => {
 
 const onEscKeyPress = (e) => {
   const ESC_KEY_CODE = 'Escape';
-
   if (e.code === ESC_KEY_CODE) {
     onCloseModal();
   }
@@ -56,7 +62,7 @@ gallery.addEventListener('click', (e) => {
     return;
   }
   showModal(e.target.dataset.source);
-  window.addEventListener('keydown', onEscKeyPress, { once: true });
+  window.addEventListener('keydown', onEscKeyPress);
 });
 
 console.log(galleryItems);
